@@ -4,9 +4,8 @@
       <v-col cols="6">
         <v-tabs
           fixed-tabs
-          background-color="indigo accent-1
-"
-          color="black"
+          background-color="indigo accent-1"
+          color="white"
           v-model="tabsForm"
         >
           <v-tab key="register"> Cadastrar </v-tab>
@@ -17,15 +16,56 @@
     <v-row class="d-flex justify-center">
       <v-col cols="4">
         <v-tabs-items v-model="tabsForm" cols="3">
-          <v-tab-item key="register">
-            <v-form class="text-center white">
+          <v-tab-item>
+            <v-form ref="form" v-model="valid" lazy-validation>
               <v-text-field
                 v-model="name"
-                label="Name"
+                :counter="10"
                 :rules="nameRules"
+                label="Nome"
                 required
               ></v-text-field>
 
+              <v-text-field
+                v-model="email"
+                :rules="emailRules"
+                label="E-mail"
+                required
+              ></v-text-field>
+
+              <v-text-field
+                v-model="password"
+                :rules="passwordRules"
+                label="Senha"
+                required
+              ></v-text-field>
+
+              <v-text-field
+                v-model="password"
+                :rules="passwordRules"
+                label="Confirmar Senha"
+                required
+              ></v-text-field>
+
+              <v-checkbox
+                v-model="checkbox"
+                :rules="[(v) => !!v || 'Você deve concordar para cpntinuar!']"
+                label="Concorda com os termos de uso?"
+                required
+              ></v-checkbox>
+
+              <v-btn
+                :disabled="!valid"
+                color="success"
+                class="mr-4"
+                @click="validate"
+              >
+                Cadastrar
+              </v-btn>
+            </v-form>
+          </v-tab-item>
+          <v-tab-item key="register">
+            <v-form class="text-center white">
               <v-text-field
                 v-model="email"
                 label="Email"
@@ -42,129 +82,56 @@
               ></v-text-field>
 
               <v-btn color="success" class="justify-space-between">
-                Registrar
+                Entrar
               </v-btn>
             </v-form>
           </v-tab-item>
-
-          <form>
-            <v-text-field
-              v-model="name"
-              :error-messages="nameErrors"
-              :counter="10"
-              label="Name"
-              required
-              @input="$v.name.$touch()"
-              @blur="$v.name.$touch()"
-            ></v-text-field>
-            <v-text-field
-              v-model="email"
-              :error-messages="emailErrors"
-              label="E-mail"
-              required
-              @input="$v.email.$touch()"
-              @blur="$v.email.$touch()"
-            ></v-text-field>
-            <v-select
-              v-model="select"
-              :items="items"
-              :error-messages="selectErrors"
-              label="Item"
-              required
-              @change="$v.select.$touch()"
-              @blur="$v.select.$touch()"
-            ></v-select>
-            <v-checkbox
-              v-model="checkbox"
-              :error-messages="checkboxErrors"
-              label="Do you agree?"
-              required
-              @change="$v.checkbox.$touch()"
-              @blur="$v.checkbox.$touch()"
-            ></v-checkbox>
-
-            <v-btn class="mr-4" @click="submit"> submit </v-btn>
-            <v-btn @click="clear"> clear </v-btn>
-          </form>
         </v-tabs-items>
       </v-col>
     </v-row>
+    <page-footer />
   </v-container>
 </template>
 
 <script>
-import { validationMixin } from "vuelidate";
-import { required, maxLength, email } from "vuelidate/lib/validators";
+import PageFooter from "./PageFooter.vue";
 export default {
+  components: { PageFooter },
   name: "AdminForm",
-  mixins: [validationMixin],
-
-  validations: {
-    name: { required, maxLength: maxLength(10) },
-    email: { required, email },
-    select: { required },
-    checkbox: {
-      checked(val) {
-        return val;
-      },
-    },
-  },
-
   data: () => ({
     tabsForm: null,
+    valid: true,
     name: "",
+    nameRules: [
+      (v) => !!v || "Nome é obrigatório",
+      (v) => (v && v.length <= 10) || "Nome deve conter menos de 10 caracteres",
+    ],
     email: "",
-    select: null,
-    items: ["Item 1", "Item 2", "Item 3", "Item 4"],
+    emailRules: [
+      (v) => !!v || "O e-mail é obrigatório",
+      (v) => /.+@.+\..+/.test(v) || "E-mail inválido",
+    ],
+    password: null,
+    passwordRules: [
+      (v) => !!v || "A senha é obrigatória",
+      (v) => (v && v.length >= 5) || "A senha deve conter mais de 5 caracteres",
+    ],
     checkbox: false,
   }),
 
-  computed: {
-    checkboxErrors() {
-      const errors = [];
-      if (!this.$v.checkbox.$dirty) return errors;
-      !this.$v.checkbox.checked && errors.push("You must agree to continue!");
-      return errors;
-    },
-    selectErrors() {
-      const errors = [];
-      if (!this.$v.select.$dirty) return errors;
-      !this.$v.select.required && errors.push("Item is required");
-      return errors;
-    },
-    nameErrors() {
-      const errors = [];
-      if (!this.$v.name.$dirty) return errors;
-      !this.$v.name.maxLength &&
-        errors.push("Name must be at most 10 characters long");
-      !this.$v.name.required && errors.push("Name is required.");
-      return errors;
-    },
-    emailErrors() {
-      const errors = [];
-      if (!this.$v.email.$dirty) return errors;
-      !this.$v.email.email && errors.push("Must be valid e-mail");
-      !this.$v.email.required && errors.push("E-mail is required");
-      return errors;
-    },
-  },
-
   methods: {
-    submit() {
-      this.$v.$touch();
-    },
-    clear() {
-      this.$v.$reset();
-      this.name = "";
-      this.email = "";
-      this.select = null;
-      this.checkbox = false;
+    validate() {
+      this.$refs.form.validate();
     },
   },
 };
 </script>
+
 <style scoped>
 .entrar {
   color: white;
+}
+.col {
+  padding: 0;
 }
 </style>
