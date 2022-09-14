@@ -14,14 +14,14 @@ const routes = [
     component: PublicLayout,
     children: [
       {
+        path: "login",
+        name: "login",
+        component: LoginView,
+      },
+      {
         path: "",
         name: "home",
         component: HomeView,
-      },
-      {
-        path: "/login",
-        name: "login",
-        component: LoginView,
       },
     ],
   },
