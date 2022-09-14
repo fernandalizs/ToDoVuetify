@@ -37,19 +37,21 @@
                 v-model="password"
                 :rules="passwordRules"
                 label="Senha"
+                type="password"
                 required
               ></v-text-field>
 
               <v-text-field
-                v-model="password"
-                :rules="passwordRules"
+                v-model="confirmPassword"
+                :rules="[confirmPasswords]"
                 label="Confirmar Senha"
+                type="password"
                 required
               ></v-text-field>
 
               <v-checkbox
                 v-model="checkbox"
-                :rules="[(v) => !!v || 'Você deve concordar para cpntinuar!']"
+                :rules="[(v) => !!v || 'Você deve concordar para continuar!']"
                 label="Concorda com os termos de uso?"
                 required
               ></v-checkbox>
@@ -89,14 +91,14 @@
         </v-tabs-items>
       </v-col>
     </v-row>
-    <page-footer />
   </v-container>
 </template>
 
 <script>
-import PageFooter from "./PageFooter.vue";
+import AuthApi from "@/api/auth.api.js";
+
 export default {
-  components: { PageFooter },
+  components: {},
   name: "AdminForm",
   data: () => ({
     tabsForm: null,
@@ -104,7 +106,8 @@ export default {
     name: "",
     nameRules: [
       (v) => !!v || "Nome é obrigatório",
-      (v) => (v && v.length <= 10) || "Nome deve conter menos de 10 caracteres",
+      (v) =>
+        (v && v.length <= 10) || "Nome deve conter no máximo 10 caracteres",
     ],
     email: "",
     emailRules: [
@@ -114,14 +117,26 @@ export default {
     password: null,
     passwordRules: [
       (v) => !!v || "A senha é obrigatória",
-      (v) => (v && v.length >= 5) || "A senha deve conter mais de 5 caracteres",
+      (v) =>
+        (v && v.length >= 6) || "A senha deve conter no mínimo 6 caracteres",
     ],
     checkbox: false,
+    confirmPassword: null,
   }),
 
   methods: {
     validate() {
       this.$refs.form.validate();
+    },
+    login() {
+      this.loading = true;
+      AuthApi.login(this.username, this.password);
+    },
+    confirmPasswords() {
+      if (this.password != this.confirmPassword) {
+        return "As senhas não coincidem";
+      }
+      return true;
     },
   },
 };
@@ -133,5 +148,8 @@ export default {
 }
 .col {
   padding: 0;
+}
+.altura {
+  height: 100vh;
 }
 </style>
