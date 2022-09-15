@@ -1,97 +1,107 @@
 <template>
-  <v-container class="white" id="login-page">
-    <v-row class="d-flex justify-center">
-      <v-col cols="6">
-        <v-tabs
-          fixed-tabs
-          background-color="indigo accent-1"
-          color="white"
-          v-model="tabsForm"
-        >
-          <v-tab key="register"> Cadastrar </v-tab>
-          <v-tab key="login"> Fazer Login </v-tab>
-        </v-tabs>
-      </v-col>
+  <v-main>
+    <v-row class="indigo accent-1 d-flex justify-center">
+      <v-icon size="180px" color="white "> mdi-format-list-checks</v-icon>
     </v-row>
-    <v-row class="d-flex justify-center">
-      <v-col cols="4">
-        <v-tabs-items v-model="tabsForm" cols="3">
-          <v-tab-item>
-            <v-form ref="form" v-model="valid" lazy-validation>
-              <v-text-field
-                v-model="name"
-                :counter="10"
-                :rules="nameRules"
-                label="Nome"
-                required
-              ></v-text-field>
+    <v-container class="white mt-3" id="login-page ">
+      <v-row class="d-flex justify-center mx-n16">
+        <v-col cols="6" class="mx-0">
+          <v-tabs
+            fixed-tabs
+            background-color="indigo accent-1"
+            color="white"
+            v-model="tabsForm"
+          >
+            <v-tab key="register"> Cadastrar </v-tab>
+            <v-tab key="login"> Fazer Login </v-tab>
+          </v-tabs>
+        </v-col>
+      </v-row>
+      <v-row class="d-flex justify-center">
+        <v-col cols="4">
+          <v-tabs-items v-model="tabsForm" cols="3">
+            <v-tab-item>
+              <v-form ref="form" v-model="valid" lazy-validation>
+                <v-text-field
+                  v-model="name"
+                  :counter="10"
+                  :rules="nameRules"
+                  label="Nome"
+                  required
+                ></v-text-field>
 
-              <v-text-field
-                v-model="email"
-                :rules="emailRules"
-                label="E-mail"
-                required
-              ></v-text-field>
+                <v-text-field
+                  v-model="email"
+                  :rules="emailRules"
+                  label="E-mail"
+                  required
+                ></v-text-field>
 
-              <v-text-field
-                v-model="password"
-                :rules="passwordRules"
-                label="Senha"
-                type="password"
-                required
-              ></v-text-field>
+                <v-text-field
+                  v-model="password"
+                  :rules="passwordRules"
+                  label="Senha"
+                  type="password"
+                  required
+                ></v-text-field>
 
-              <v-text-field
-                v-model="confirmPassword"
-                :rules="[confirmPasswords]"
-                label="Confirmar Senha"
-                type="password"
-                required
-              ></v-text-field>
+                <v-text-field
+                  v-model="confirmPassword"
+                  :rules="[confirmPasswords]"
+                  label="Confirmar Senha"
+                  type="password"
+                  required
+                ></v-text-field>
 
-              <v-checkbox
-                v-model="checkbox"
-                :rules="[(v) => !!v || 'Você deve concordar para continuar!']"
-                label="Concorda com os termos de uso?"
-                required
-              ></v-checkbox>
+                <v-checkbox
+                  v-model="checkbox"
+                  :rules="[(v) => !!v || 'Você deve concordar para continuar!']"
+                  label="Concorda com os termos de uso?"
+                  required
+                ></v-checkbox>
 
-              <v-btn
-                :disabled="!valid"
-                color="success"
-                class="mr-4"
-                @click="validate"
-              >
-                Cadastrar
-              </v-btn>
-            </v-form>
-          </v-tab-item>
-          <v-tab-item key="register">
-            <v-form class="text-center white">
-              <v-text-field
-                v-model="email"
-                label="Email"
-                :rules="emailRules"
-                required
-              ></v-text-field>
+                <v-btn
+                  :disabled="!valid"
+                  color="success"
+                  class="mr-4"
+                  @click="validate"
+                  :to="{ name: 'info' }"
+                >
+                  Cadastrar
+                </v-btn>
+              </v-form>
+            </v-tab-item>
+            <v-tab-item key="register">
+              <v-form class="text-center white">
+                <v-text-field
+                  v-model="email"
+                  label="Email"
+                  :rules="emailRules"
+                  required
+                ></v-text-field>
 
-              <v-text-field
-                v-model="password"
-                label="Senha"
-                type="password"
-                :rules="passwordRules"
-                required
-              ></v-text-field>
+                <v-text-field
+                  v-model="password"
+                  label="Senha"
+                  type="password"
+                  :rules="passwordRules"
+                  required
+                ></v-text-field>
 
-              <v-btn color="success" class="justify-space-between">
-                Entrar
-              </v-btn>
-            </v-form>
-          </v-tab-item>
-        </v-tabs-items>
-      </v-col>
-    </v-row>
-  </v-container>
+                <v-btn
+                  color="success"
+                  class="justify-space-between"
+                  :to="{ name: 'info' }"
+                >
+                  Entrar
+                </v-btn>
+              </v-form>
+            </v-tab-item>
+          </v-tabs-items>
+        </v-col>
+      </v-row>
+    </v-container>
+  </v-main>
 </template>
 
 <script>
