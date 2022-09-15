@@ -4,6 +4,8 @@ import HomeView from "@/views/HomeView.vue";
 import LoginView from "@/views/LoginView.vue";
 import TaskListView from "@/views/TaskListView.vue";
 import InfoView from "@/views/InfoView.vue";
+import TaskFormView from "@/views/TaskFormView.vue";
+import ProjectFormView from "@/views/ProjectFormView.vue";
 import PublicLayout from "@/layouts/PublicLayout.vue";
 import PrivateLayout from "@/layouts/PrivateLayout.vue";
 
@@ -39,6 +41,16 @@ const routes = [
         path: "/info",
         name: "info",
         component: InfoView,
+      },
+      {
+        path: "/task-form",
+        name: "task-form",
+        component: TaskFormView,
+      },
+      {
+        path: "project-form",
+        name: "project-form",
+        component: ProjectFormView,
       },
     ],
   },
