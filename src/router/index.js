@@ -43,13 +43,13 @@ const routes = [
         component: InfoView,
       },
       {
-        path: "/task-form",
-        name: "task-form",
+        path: ":id",
+        name: "taskForm",
         component: TaskFormView,
       },
       {
         path: "project-form",
-        name: "project-form",
+        name: "projectForm",
         component: ProjectFormView,
       },
     ],

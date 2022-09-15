@@ -11,10 +11,14 @@
             <v-card-actions>
               <v-list-item class="grow">
                 <v-row align="center" justify="end">
-                  <v-btn x-small icon color="blue"
+                  <v-btn
+                    x-small
+                    icon
+                    color="blue"
+                    :to="{ name: 'taskForm', params: { id: task.id } }"
                     ><v-icon>fas fa-pen fa-xs</v-icon></v-btn
                   >
-                  <v-btn x-small icon color="red"
+                  <v-btn x-small icon color="red" @click="deleteTask(task.id)"
                     ><v-icon>far fa-trash-alt fa-xs</v-icon></v-btn
                   >
                 </v-row>
@@ -28,36 +32,27 @@
 </template>
 
 <script>
+import TaskApi from "@/api/tasks.api";
 export default {
   data: () => {
     return {
-      tasks: [
-        {
-          id: 1,
-          title: "Task 1",
-        },
-        {
-          id: 2,
-          title: "Task Two",
-        },
-        {
-          id: 3,
-          title: "Task 3",
-        },
-        {
-          id: 4,
-          title: "Task Four",
-        },
-        {
-          id: 5,
-          title: "Task Cinco",
-        },
-        {
-          id: 6,
-          title: "Tarefa six",
-        },
-      ],
+      tasks: [],
     };
+  },
+  methods: {
+    getTasks() {
+      TaskApi.getTasks().then((data) => {
+        this.tasks = data;
+      });
+    },
+    deleteTask(taskId) {
+      TaskApi.removeTask(taskId).then(() => {
+        this.getTasks();
+      });
+    },
+  },
+  created() {
+    this.getTasks();
   },
 };
 </script>
