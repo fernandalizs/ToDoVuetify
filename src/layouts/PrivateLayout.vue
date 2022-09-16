@@ -1,9 +1,11 @@
 <template>
-  <v-main>
-    <page-bar />
-    <router-view></router-view>
+  <div>
+    <v-main class="pa-16 mb-16">
+      <page-bar />
+      <router-view></router-view>
+    </v-main>
     <page-footer />
-  </v-main>
+  </div>
 </template>
 <script>
 import PageFooter from "@/components/PageFooter.vue";

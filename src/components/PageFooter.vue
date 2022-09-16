@@ -1,5 +1,5 @@
 <template>
-  <v-footer dark padless fixed color="indigo accent-1">
+  <v-footer dark padless fixed absolute color="indigo accent-1">
     <v-card flat tile class="indigo accent-1 white--text text-center mx-auto">
       <v-card-text>
         <v-btn
