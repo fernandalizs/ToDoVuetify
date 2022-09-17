@@ -7,7 +7,7 @@
   >
     <v-app-bar-nav-icon></v-app-bar-nav-icon>
 
-    <v-toolbar-title>ToDo List</v-toolbar-title>
+    <v-toolbar-title class="white--text">ToDo List</v-toolbar-title>
 
     <v-spacer></v-spacer>
 
