@@ -3,7 +3,7 @@
     <v-row class="indigo accent-1 d-flex justify-center">
       <v-icon size="180px" color="white "> mdi-format-list-checks</v-icon>
     </v-row>
-    <v-container>
+    <v-container class="pt-16 mt-16">
       <h1>ToDo Vuetify</h1>
       <p>Aplicativo de organização de tarefas e produtividade com Vuetify!</p>
       <v-btn
