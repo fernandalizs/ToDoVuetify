@@ -6,7 +6,7 @@ export default {
       api
         .post("/api/auth/login", { username, password })
         .then((response) => {
-          console.log("API AUTH: SUCESS");
+          console.log("API AUTH: SUCCESS");
           return resolve(response.data);
         })
         .catch((error) => {
