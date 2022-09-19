@@ -7,7 +7,10 @@
             <v-card-text>
               <div>#{{ task.id }}</div>
               <p class="ma-0 pa-0 text-h5 text--primary">{{ task.title }}</p>
-              <p>{{ task.project }}</p>
+              <div class="d-flex justify-space-between">
+                <p>{{ task.project }}</p>
+                <p>{{ task.date }}</p>
+              </div>
             </v-card-text>
             <v-card-actions>
               <v-list-item class="grow">
