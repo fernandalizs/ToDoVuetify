@@ -27,6 +27,11 @@
             </v-card-actions>
           </v-card>
         </v-col>
+        <div class="my-2">
+          <v-btn color="#5C6BC0" fab dark :to="{ name: 'taskForm' }">
+            <v-icon>mdi-plus</v-icon>
+          </v-btn>
+        </div>
       </v-row>
     </v-container>
   </v-main>
