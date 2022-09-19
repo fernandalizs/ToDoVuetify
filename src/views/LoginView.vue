@@ -1,5 +1,18 @@
 <template>
   <v-main>
+    <v-snackbar
+      v-model="snackbar.show"
+      :value="true"
+      color="red"
+      absolute
+      left
+      shaped
+      top
+    >
+      <h3 style="font-size: 20 px">
+        {{ snackbar.message }}
+      </h3>
+    </v-snackbar>
     <v-row class="indigo accent-1 d-flex justify-center">
       <v-icon size="180px" color="white "> mdi-format-list-checks</v-icon>
     </v-row>
@@ -47,7 +60,7 @@
 
                 <v-text-field
                   v-model="confirmPassword"
-                  :rules="[confirmPasswords]"
+                  :rules="[required, min6, matchingPasswords]"
                   label="Confirmar Senha"
                   type="password"
                   required
@@ -61,11 +74,11 @@
                 ></v-checkbox>
 
                 <v-btn
+                  :loading="loading"
                   :disabled="!valid"
                   color="success"
                   class="mr-4"
                   @click="validate"
-                  :to="{ name: 'info' }"
                 >
                   Cadastrar
                 </v-btn>
@@ -74,10 +87,11 @@
             <v-tab-item key="register">
               <v-form class="text-center white">
                 <v-text-field
-                  v-model="email"
-                  label="Email"
-                  :rules="emailRules"
+                  v-model="username"
+                  label="Usuário"
                   required
+                  :rules="usernameRules"
+                  v-on:keyup.enter="login"
                 ></v-text-field>
 
                 <v-text-field
@@ -86,12 +100,15 @@
                   type="password"
                   :rules="passwordRules"
                   required
+                  v-on:keyup.enter="login"
                 ></v-text-field>
 
                 <v-btn
+                  :loading="loading"
+                  :disabled="!validLogin"
                   color="success"
                   class="justify-space-between"
-                  :to="{ name: 'info' }"
+                  @click="login"
                 >
                   Entrar
                 </v-btn>
@@ -109,15 +126,25 @@ import AuthApi from "@/api/auth.api.js";
 
 export default {
   components: {},
-  name: "AdminForm",
   data: () => ({
     tabsForm: null,
     valid: true,
+    validLogin: true,
+    loading: false,
+    snackbar: {
+      show: false,
+      message: "",
+    },
     name: "",
     nameRules: [
       (v) => !!v || "Nome é obrigatório",
       (v) =>
         (v && v.length <= 10) || "Nome deve conter no máximo 10 caracteres",
+    ],
+    username: "",
+    usernameRules: [
+      (v) => !!v || "Usuário é obrigatório",
+      (v) => (v && v.length >= 4) || "Nome deve conter mais de 4 caracteres",
     ],
     email: "",
     emailRules: [
@@ -131,7 +158,7 @@ export default {
         (v && v.length >= 6) || "A senha deve conter no mínimo 6 caracteres",
     ],
     checkbox: false,
-    confirmPassword: null,
+    confirmPassword: "",
   }),
 
   methods: {
@@ -140,13 +167,46 @@ export default {
     },
     login() {
       this.loading = true;
-      AuthApi.login(this.username, this.password);
+      AuthApi.login(this.username, this.password)
+        .then((user) => {
+          console.log("usuário logado:", user);
+          this.saveLoggedUser(user);
+          this.$router.push({ name: "info" });
+        })
+        .catch((error) => {
+          console.log("falha no login:", error);
+          this.snackbar.message = "Usuário ou senha inválidos!";
+          this.snackbar.show = true;
+        })
+        .finally(() => {
+          this.loading = false;
+        });
     },
-    confirmPasswords() {
-      if (this.password != this.confirmPassword) {
+    //salvar usuário logado no localstorage
+    saveLoggedUser(user) {
+      window.localStorage.setItem("loggedUser", user.id);
+      window.localStorage.setItem("loggedUserToken", user.token);
+    },
+    matchingPasswords() {
+      if (this.password === this.confirmPassword) {
+        return true;
+      } else {
         return "As senhas não coincidem";
       }
-      return true;
+    },
+    required() {
+      if (this.confirmPassword) {
+        return true;
+      } else {
+        return "A confirmação de senha é obrigatória.";
+      }
+    },
+    min6() {
+      if (this.confirmPassword.length >= 6) {
+        return true;
+      } else {
+        return "A senha deve conter no mínimo 6 caracteres";
+      }
     },
   },
 };
