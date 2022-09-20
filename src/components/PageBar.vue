@@ -21,7 +21,7 @@
       </v-btn>
 
       <v-btn icon>
-        <v-icon>mdi-dots-vertical</v-icon>
+        <v-icon @click="logout" color="white">mdi-logout</v-icon>
       </v-btn>
     </v-app-bar>
 
@@ -62,8 +62,6 @@
   </div>
 </template>
 <script>
-// import AuthApi from "@/api/auth.api.js";
-
 export default {
   data() {
     return {
@@ -88,6 +86,12 @@ export default {
         },
       ],
     };
+  },
+  methods: {
+    logout() {
+      localStorage.clear();
+      this.$router.push({ name: "home" });
+    },
   },
   computed: {
     getLoggedUser() {
