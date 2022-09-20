@@ -28,12 +28,13 @@ module.exports = {
     if (!loggedUser) {
       return;
     }
-    const { title, project, status } = req.body;
+    const { title, project, status, date } = req.body;
     const id = getMaxId(data.tasks) + 1;
     const newTask = {
       id,
       title,
       project,
+      date,
       status,
       userId: loggedUser.id,
     };
@@ -55,6 +56,7 @@ module.exports = {
     task.title = title;
     task.project = project;
     task.status = status;
+    task.date = date;
     res.send(task);
   },
   remove: (req, res) => {
