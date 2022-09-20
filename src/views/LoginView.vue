@@ -4,9 +4,9 @@
       v-model="snackbar.show"
       :value="true"
       color="red"
+      timeout="2000"
       absolute
       left
-      shaped
       top
     >
       <h3 style="font-size: 20 px">
@@ -14,7 +14,7 @@
       </h3>
     </v-snackbar>
     <v-row class="indigo accent-1 d-flex justify-center">
-      <v-icon size="180px" color="white "> mdi-format-list-checks</v-icon>
+      <v-icon size="100px" color="white "> mdi-format-list-checks</v-icon>
     </v-row>
     <v-container class="white mt-3" id="login-page ">
       <v-row class="d-flex justify-center mx-n16">
@@ -37,12 +37,18 @@
               <v-form ref="form" v-model="valid" lazy-validation>
                 <v-text-field
                   v-model="name"
-                  :counter="10"
                   :rules="nameRules"
                   label="Nome"
                   required
                 ></v-text-field>
-
+                <v-text-field
+                  v-model="username"
+                  label="Usuário"
+                  :counter="15"
+                  required
+                  :rules="usernameRules"
+                  v-on:keyup.enter="login"
+                ></v-text-field>
                 <v-text-field
                   v-model="email"
                   :rules="emailRules"
@@ -78,7 +84,7 @@
                   :disabled="!valid"
                   color="success"
                   class="mr-4"
-                  @click="validate"
+                  @click="signup"
                 >
                   Cadastrar
                 </v-btn>
@@ -136,15 +142,12 @@ export default {
       message: "",
     },
     name: "",
-    nameRules: [
-      (v) => !!v || "Nome é obrigatório",
-      (v) =>
-        (v && v.length <= 10) || "Nome deve conter no máximo 10 caracteres",
-    ],
+    nameRules: [(v) => !!v || "Nome é obrigatório"],
     username: "",
     usernameRules: [
       (v) => !!v || "Usuário é obrigatório",
-      (v) => (v && v.length >= 4) || "Nome deve conter mais de 4 caracteres",
+      (v) =>
+        (v && v.length <= 15) || "Usuário deve conter no máximo 15 caracteres",
     ],
     email: "",
     emailRules: [
@@ -182,8 +185,27 @@ export default {
           this.loading = false;
         });
     },
+    signup() {
+      this.loading = true;
+      AuthApi.signup(this.name, this.username, this.email, this.password)
+        .then((user) => {
+          console.log("usuário cadastrado:", user);
+          this.saveLoggedUser(user);
+          this.$router.push({ name: "info" });
+        })
+        .catch((error) => {
+          console.log("falha no cadastro:", error);
+          this.snackbar.message =
+            "Falha ao cadastrar novo usuário. Tente novamente!";
+          this.snackbar.show = true;
+        })
+        .finally(() => {
+          this.loading = false;
+        });
+    },
     //salvar usuário logado no localstorage
     saveLoggedUser(user) {
+      window.localStorage.setItem("user", JSON.stringify(user));
       window.localStorage.setItem("loggedUser", user.id);
       window.localStorage.setItem("loggedUserToken", user.token);
     },
