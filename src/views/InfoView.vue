@@ -16,7 +16,7 @@
                   :size="100"
                   :width="15"
                   :value="item.percent"
-                  color="pink"
+                  color="indigo lighten-2"
                 >
                   {{ item.percent.toFixed(1) }}
                 </v-progress-circular>
@@ -80,3 +80,8 @@ export default {
   },
 };
 </script>
+<style scoped>
+h2 {
+  color: black;
+}
+</style>
